@@ -10,26 +10,54 @@ interface PaginationProps {
 
 export default function Pagination({ totalPages, page, setPage }: PaginationProps) {
     return (
-        <nav className={css.pagination} aria-label="Notes pagination">
-            <button
-                type="button"
-                onClick={() => setPage(page - 1)}
-                disabled={page <= 1}
-                aria-label="Previous page"
-            >
-                ←
-            </button>
-            <span aria-current="page">
-                Page {page} of {totalPages}
-            </span>
-            <button
-                type="button"
-                onClick={() => setPage(page + 1)}
-                disabled={page >= totalPages}
-                aria-label="Next page"
-            >
-                →
-            </button>
+        <nav aria-label="Notes pagination">
+            <ul className={css.pagination}>
+                <li>
+                    <a
+                        href="#"
+                        aria-label="Previous page"
+                        aria-disabled={page <= 1}
+                        onClick={event => {
+                            event.preventDefault();
+                            if (page > 1) setPage(page - 1);
+                        }}
+                    >
+                        ←
+                    </a>
+                </li>
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                    pageNumber => (
+                        <li
+                            className={pageNumber === page ? css.active : undefined}
+                            key={pageNumber}
+                        >
+                            <a
+                                href="#"
+                                aria-current={pageNumber === page ? 'page' : undefined}
+                                onClick={event => {
+                                    event.preventDefault();
+                                    setPage(pageNumber);
+                                }}
+                            >
+                                {pageNumber}
+                            </a>
+                        </li>
+                    )
+                )}
+                <li>
+                    <a
+                        href="#"
+                        aria-label="Next page"
+                        aria-disabled={page >= totalPages}
+                        onClick={event => {
+                            event.preventDefault();
+                            if (page < totalPages) setPage(page + 1);
+                        }}
+                    >
+                        →
+                    </a>
+                </li>
+            </ul>
         </nav>
     );
 }

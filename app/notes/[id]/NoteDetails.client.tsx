@@ -7,7 +7,10 @@ import css from './NoteDetails.module.css';
 
 export default function NoteDetailsClient() {
     const { id } = useParams<{ id: string }>();
-    const { data: note, isLoading, isError } = useQuery(noteQueryOptions(id));
+    const { data: note, isLoading, isError } = useQuery({
+        ...noteQueryOptions(id),
+        refetchOnMount: false,
+    });
 
     if (isLoading) {
         return <p>Loading, please wait...</p>;
